@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment variables (SENSITIVE)
+.env
+
+# User config (SENSITIVE)
+config.yaml
+
+# IDE settings
+.vscode/
+.idea/
+
+# Test cache
+.pytest_cache/
+tests/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Reference documents (personal notes)
+*.md
+!README.md
+!LICENSE.md

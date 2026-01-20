@@ -1,0 +1,6 @@
+discord.py>=2.6.0
+httpx
+google-genai
+python-dotenv
+pyyaml
+pytest
