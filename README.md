@@ -4,12 +4,10 @@ A Discord chatbot powered by Google's Gemini API with native Google Search integ
 
 ## Features
 
-- 🔍 **Google Search**: Real-time information via Google Search grounding
-- 🖼️ **Vision**: Analyze images attached to messages
-- 💬 **Conversation Memory**: Maintains context across messages (up to 500 cached)
-- 🔄 **API Fallback**: Multi-key and multi-model fallback for reliability
-- 🌐 **Traditional Chinese (TW)**: Localized responses with Taiwan terminology
-- ⚡ **Streaming**: Real-time response streaming with typing indicator
+-  **Google Search**: Real-time information via Google Search grounding
+-  **Vision**: Analyze images attached to messages
+-  **Conversation Memory**: Maintains context across messages (up to 500 cached)
+-  **API Fallback**: Multi-key and multi-model fallback for reliability
 
 ## Quick Start
 
