@@ -12,7 +12,7 @@ A Discord chatbot powered by Google's Gemini API with native Google Search integ
 ## Quick Start
 
 ### 1. Prerequisites
-- Python 3.11+
+- Python 3.12+
 - Discord Bot Token ([Discord Developer Portal](https://discord.com/developers/applications))
 - Gemini API Key ([Google AI Studio](https://aistudio.google.com/apikey))
 
@@ -23,10 +23,9 @@ A Discord chatbot powered by Google's Gemini API with native Google Search integ
 git clone https://github.com/Cheng-Hsien-Wu/discord-chatbot.git
 cd discord-chatbot
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # Linux/macOS
-# or: venv\Scripts\activate  # Windows
+# Create conda environment
+conda create -n discord-bot python=3.12
+conda activate discord-bot
 
 # Install dependencies
 pip install -r requirements.txt
