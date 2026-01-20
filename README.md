@@ -56,6 +56,43 @@ permissions:
 python main.py
 ```
 
+## Systemd Deployment (Linux/VPS)
+
+Recommended for Oracle Always Free or small VPS where saving RAM (vs Docker) matters.
+
+1. **Setup Directory**
+   Follow the [Quick Start](#quick-start) to set up the environment and config in `/home/opc/discord-chatbot` (or your user path).
+
+2. **Create Service File**
+   ```bash
+   sudo nano /etc/systemd/system/discord-bot.service
+   ```
+   Paste the following (adjust `User` and paths as needed):
+   ```ini
+   [Unit]
+   Description=Gemini Discord Bot
+   After=network.target
+
+   [Service]
+   User=opc
+   WorkingDirectory=/home/opc/discord-chatbot
+   EnvironmentFile=/home/opc/discord-chatbot/.env
+   # Adjust path to your python executable (venv or conda)
+   ExecStart=/home/opc/discord-chatbot/venv/bin/python main.py
+   Restart=always
+   RestartSec=10
+
+   [Install]
+   WantedBy=multi-user.target
+   ```
+
+3. **Enable & Start**
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable discord-bot
+   sudo systemctl start discord-bot
+   ```
+
 ## Docker Deployment
 
 ```bash
