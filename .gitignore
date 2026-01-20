@@ -14,6 +14,11 @@ env/
 # User config (SENSITIVE)
 config.yaml
 
+# SSH keys (SENSITIVE - NEVER COMMIT)
+*.key
+*.pem
+*.pub
+
 # IDE settings
 .vscode/
 .idea/
@@ -29,4 +34,3 @@ Thumbs.db
 # Reference documents (personal notes)
 *.md
 !README.md
-!LICENSE.md

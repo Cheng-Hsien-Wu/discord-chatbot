@@ -56,21 +56,7 @@ permissions:
 python main.py
 ```
 
-## Run
-
-### Local / VPS (No Docker)
-
-```bash
-python main.py
-```
-
-To run in background:
-```bash
-nohup python main.py &
-```
-
-### Docker
-
+Or with Docker:
 ```bash
 docker compose up -d
 ```
@@ -86,8 +72,8 @@ docker compose up -d
 
 ## License
 
-MIT License - See [LICENSE.md](LICENSE.md)
+MIT License - See [LICENSE](LICENSE)
 
 ## Acknowledgments
 
-Inspired by [llmcord](https://github.com/jakobdylanc/llmcord) by Jakob Dylan C.
+Based on [llmcord](https://github.com/jakobdylanc/llmcord) by Jakob Dylan C.
