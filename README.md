@@ -94,4 +94,4 @@ The following features are inherited from llmcord:
 - Hot-reload configuration
 - Message caching with mutex protection
 
-This fork replaces the OpenAI-compatible API layer with Google's native `google-genai` SDK to enable Gemini-specific features like Google Search grounding.
+This fork replaces the OpenAI-compatible API layer with Google's native `google-genai` SDK to enable Gemini-specific features like Google Search grounding. The codebase is also reorganized with section headers and clearer function structure for improved readability.
