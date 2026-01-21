@@ -215,15 +215,31 @@ async def process_message_node(
         *[httpx_client.get(att.url) for att in good_attachments]
     )
 
-    curr_node.text = "\n".join(
-        ([cleaned_content] if cleaned_content else [])
-        + ["\n".join(filter(None, (embed.title, embed.description, embed.footer.text)))
-           for embed in curr_msg.embeds]
-        + [component.content for component in curr_msg.components
-           if component.type == discord.ComponentType.text_display]
-        + [resp.text for att, resp in zip(good_attachments, attachment_responses)
-           if att.content_type.startswith("text")]
-    )
+    # Build text content
+    text_parts = []
+    
+    # Prepend user ID for user messages so LLM knows who is speaking
+    if curr_msg.author != discord_bot.user:
+        text_parts.append(f"[User ID: {curr_msg.author.id}]")
+    
+    if cleaned_content:
+        text_parts.append(cleaned_content)
+    
+    text_parts.extend([
+        "\n".join(filter(None, (embed.title, embed.description, embed.footer.text)))
+        for embed in curr_msg.embeds
+    ])
+    text_parts.extend([
+        component.content for component in curr_msg.components
+        if component.type == discord.ComponentType.text_display
+    ])
+    text_parts.extend([
+        resp.text for att, resp in zip(good_attachments, attachment_responses)
+        if att.content_type.startswith("text")
+    ])
+    
+    curr_node.text = "\n".join(text_parts)
+
 
     curr_node.images = [
         types.Part.from_bytes(data=resp.content, mime_type=att.content_type)
