@@ -378,13 +378,34 @@ async def generate_and_send_response(
                         
                         logging.info(f"Attempting generation with model='{model}' and key='...{api_key[-4:]}'")
 
+                        # Build thinking config based on model type
+                        thinking_config = None
+                        grounding_chunks = []
+                        thinking_level = config.get("thinking_level")
+                        thinking_budget = config.get("thinking_budget")
+                        
+                        if thinking_level and "gemini-3" in model:
+                            thinking_config = types.ThinkingConfig(thinking_level=thinking_level)
+                            logging.info(f"Using thinking_level='{thinking_level}' for {model}")
+                        elif thinking_budget is not None and "gemini-2" in model:
+                            thinking_config = types.ThinkingConfig(thinking_budget=thinking_budget)
+                            logging.info(f"Using thinking_budget={thinking_budget} for {model}")
+
+                        # Build tools list
+                        tools = []
+                        if config.get("use_google_search", True):
+                            tools.append(types.Tool(google_search=types.GoogleSearch()))
+                        if config.get("use_url_context", True):
+                            tools.append(types.Tool(url_context=types.UrlContext()))
+
                         async for chunk in await client.aio.models.generate_content_stream(
                             model=model,
                             contents=messages[::-1],
                             config=types.GenerateContentConfig(
                                 temperature=config.get("temperature", 1.0),
                                 system_instruction=system_instruction,
-                                tools=[types.Tool(google_search=types.GoogleSearch())] if config.get("use_google_search", True) else None
+                                thinking_config=thinking_config,
+                                tools=tools if tools else None
                             )
                         ):
                             curr_content = chunk.text or ""
@@ -397,6 +418,12 @@ async def generate_and_send_response(
                                 response_contents.append("")
 
                             response_contents[-1] += curr_content
+                            
+                            # Collect grounding metadata
+                            if chunk.candidates and chunk.candidates[0].grounding_metadata:
+                                metadata = chunk.candidates[0].grounding_metadata
+                                if metadata.grounding_chunks:
+                                    grounding_chunks = metadata.grounding_chunks
 
                             if not use_plain_responses:
                                 time_delta = datetime.now().timestamp() - last_task_time
@@ -414,6 +441,21 @@ async def generate_and_send_response(
 
                                     last_task_time = datetime.now().timestamp()
                         
+                        # Apply citations if available
+                        if grounding_chunks:
+                            sources_text = "\n\n**Sources:**\n"
+                            unique_sources = {}
+                            for g_chunk in grounding_chunks:
+                                if g_chunk.web and g_chunk.web.uri not in unique_sources:
+                                    unique_sources[g_chunk.web.uri] = g_chunk.web.title
+
+                            for i, (uri, title) in enumerate(unique_sources.items()):
+                                display_title = title or "Source"
+                                sources_text += f"{i+1}. [{display_title}]({uri})\n"
+                            
+                            if response_contents:
+                                response_contents[-1] += sources_text
+
                         # If we reached here without exception, success!
                         success = True
                         break

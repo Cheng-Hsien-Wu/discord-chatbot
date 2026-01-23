@@ -6,6 +6,9 @@ max_messages: 25
 temperature: 1.0
 use_plain_responses: false
 use_google_search: true
+use_url_context: true
+thinking_level: "high" # Gemini 3 Config: "minimal", "low", "medium", "high"
+thinking_budget: -1 # Gemini 2.5 Config: -1 (Dynamic), 0 (Off), or Token Count (Max: 32768 for Pro, 24576 for Flash)
 allow_dms: false
 
 permissions:
